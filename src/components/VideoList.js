@@ -8,7 +8,7 @@ const VideoList = ({ videos }) => {
     return <VideoItem key={video.id.videoId} video={video}/>
   });
   // therefore we dont need to write props.videos
-  return <div>{renderedList}</div>
+  return <div className="ui relaxed divided list">{renderedList}</div>
 };
 
 export default VideoList;
