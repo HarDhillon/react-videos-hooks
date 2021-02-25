@@ -1,8 +1,14 @@
 import React from 'react';
+import VideoItem from './VideoItem';
 
-const VideoList = (props) => {
-  // props.videos to access list
-  return <div>{props.videos.length}</div>
+// rather than write props you can reference the items inside the props immediately
+const VideoList = ({ videos }) => {
+  const renderedList = videos.map((video) => {
+    console.log(video)
+    return <VideoItem key={video.id.videoId} video={video}/>
+  });
+  // therefore we dont need to write props.videos
+  return <div>{renderedList}</div>
 };
 
 export default VideoList;
