@@ -1,56 +1,55 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchBar from './SearchBar';
 import youtube from '../apis/youtube';
 import VideoList from './VideoList';
 import VideoDetail from './VideoDetail';
 
-class App extends React.Component{
-  state = { videos: [], selectedVideo: null };
+const App = () => {
 
-  componentDidMount() {
-    this.onTermSubmit('cats')
-  }
+  const [videos, setVideos] = useState([])
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
-  // we could use promises (.then) but we can also use async. We are storing the reponse ONCE it loads
-  onTermSubmit = async (term) => {
+  useEffect(() =>{
+    onTermSubmit('cats')
+  }, []);
+
+  const onTermSubmit = async (term) => {
     const response = await youtube.get('/search', {
       params: {
         q: term
       }
     });
-    this.setState({ 
-      videos: response.data.items,
-      // set first video as selected on new search
-      selectedVideo: response.data.items[0]
-    })
-  };
 
-  onVideoSelect = (video) => {
-    this.setState({ selectedVideo: video });
-  };
-  
-  render() {
+    setVideos(response.data.items)
+    setSelectedVideo(response.data.items[0]) 
+
+    }
+
+    const onVideoSelect = (video) => {
+      setSelectedVideo(video);
+    };
 
     return (
       <div className="ui container">
-        <SearchBar onFormSubmit={this.onTermSubmit}/>
+        <SearchBar onFormSubmit={onTermSubmit} />
 
         <div className="ui grid">
           <div className="ui row">
 
             <div className="eleven wide column">
-              <VideoDetail video={this.state.selectedVideo} />
+              <VideoDetail video={selectedVideo} />
             </div>
 
             <div className="five wide column">
-              <VideoList videos={this.state.videos} onVideoSelect={this.onVideoSelect} />
+              <VideoList videos={videos} onVideoSelect={onVideoSelect} />
             </div>
 
           </div>
         </div>
       </div>
     );
-  }
-}
+
+};
+
 
 export default App;
